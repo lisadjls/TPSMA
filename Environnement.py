@@ -3,6 +3,7 @@ import random
 from pygame.math import Vector2
 
 import core
+import epidemie
 from Agent import Agent
 from Body import Body
 
@@ -28,7 +29,8 @@ class Environnement:
 
     def applyDecision(self):
         for agent in self.listAgent:
-            agent.body.applyDecision()
+            agent.body.update(epidemie.epidemie_params)
+            agent.update()
 
 
     def show(self):
@@ -44,9 +46,9 @@ class Environnement:
     def addRandomAgents(self, n):
         size = 10
         for i in range(n):
-            a = Agent(Body(Vector2(random.randint(size, self.L-size), random.randint(size, self.H-size)), size), "S")
+            a = Agent(Body(Vector2(random.randint(size, self.L-size), random.randint(size, self.H-size)), size,"S"), "S")
             self.listAgent.append(a)
-        i=Agent(Body(Vector2(random.randint(size, self.L-size), random.randint(size, self.H-size)), size), "I")
+        i=Agent(Body(Vector2(random.randint(size, self.L-size), random.randint(size, self.H-size)), size,"I"), "I")
         self.listAgent.append(i)
 
     def delAgent(self, agent):

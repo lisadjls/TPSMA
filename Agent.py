@@ -2,7 +2,7 @@ import random
 
 from pygame.math import Vector2
 
-
+import epidemie
 
 
 class Agent:
@@ -16,17 +16,22 @@ class Agent:
         infectes = []
         for p in listPerception:
             if isinstance(p, Agent):
-                distance = self.body.position.distance_to(p.position)
+                distance = self.body.position.distance_to(p.body.position)
                 if p.statut == "I":
                     if distance < epidemie_params["min_contagion_distance"]:
                         infectes.append(p)
-
         return infectes
 
     def doDecision(self):
-        att = Vector2(random.randint(-5, 5), random.randint(-5, 5))
+        att = Vector2(random.randint(-1, 1), random.randint(-1, 1))
         self.body.a = att
+        infectes= self.filtrePerception(self.listPerception, epidemie.epidemie_params)
+        if infectes is not None:
+            self.body.update(epidemie.epidemie_params)
 
+    def update(self):
+        if self.body.is_contagious:
+            self.statut="I"
     def show(self):
         if self.statut=="S":
             self.body.show((0, 0, 255))
